@@ -1,0 +1,27 @@
+name: local
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - /c/UploadsExternos:/uploads
+
+  db:
+    image: postgres:15
+    container_name: proyecto4-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: proyecto4
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    ports:
+      - '5433:5432'
+    volumes:
+      - proyecto4_data:/var/lib/postgresql/data
+      - ./cargadatos/datos.sql:/docker-entrypoint-initdb.d/datos.sql
+
+volumes:
+  proyecto4_data:

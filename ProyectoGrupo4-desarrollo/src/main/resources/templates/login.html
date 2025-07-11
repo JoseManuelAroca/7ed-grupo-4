@@ -1,0 +1,65 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout/plantilla}">
+<head>
+
+    <title>login</title>
+
+</head>
+
+<body class="bg-gradient-primary">
+
+<div layout:fragment="contenido">
+    <!-- Page Title -->
+    <div class="page-title" data-aos="fade">
+        <nav class="breadcrumbs">
+            <div class="container">
+                <ol>
+                    <li><a th:href="@{/}">Inicio</a></li>
+                    <li class="current">Iniciar sesión</li>
+                </ol>
+            </div>
+        </nav>
+    </div><!-- End Page Title -->
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact section">
+        <div class="container" data-aos="fade-up" data-aos-delay="100">
+            <div>
+                <form class="emailForm" data-aos="fade-up" data-aos-delay="200" th:action="@{/login}" method="post">
+                    <div th:if="${param.registroExitoso}" class="alert alert-success">¡Registro exitoso! Por favor, inicia sesión.</div>
+                    <div th:if="${param.error}" class="alert alert-danger">Usuario o contraseña incorrecta</div>
+                    <div th:if="${param.logout}" class="alert alert-success">Has cerrado sesión correctamente.</div>
+                    <div class="row gy-4">
+                        <div>
+                            <input type="text" class="form-control" name="username" placeholder="Email o Nickname" required="">
+                        </div>
+
+                        <div>
+                            <input type="password" class="form-control" name="password" placeholder="Contraseña" required="">
+                        </div>
+
+                        <div class="text-center">
+                            <a href="#">¿Has olvidado tu contraseña?</a>
+                            <span> | </span>
+                            <a th:href="@{/registrarse}">Registrarse</a>
+                        </div>
+
+                        <div class="text-center">
+                            <div class="loading">Cargando</div>
+                            <div class="error-message"></div>
+                            <div class="sent-message">Your message has been sent. Thank you!</div>
+
+                            <button type="submit">Iniciar sesión</button>
+                        </div>
+                    </div>
+                </form>
+            </div><!-- End Contact Form -->
+        </div>
+
+    </section><!-- /Contact Section -->
+</div>
+
+</body>
+
+</html>
