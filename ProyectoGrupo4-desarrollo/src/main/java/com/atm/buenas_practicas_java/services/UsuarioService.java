@@ -6,6 +6,7 @@ import com.atm.buenas_practicas_java.entities.UserRol;
 import com.atm.buenas_practicas_java.entities.Usuario;
 import com.atm.buenas_practicas_java.repositories.UsuarioRepo;
 import com.atm.buenas_practicas_java.services.mapper.UsuarioMapper;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-
+@Getter
 @Service
 public class UsuarioService extends AbstractBusinessService<Usuario, Integer, UsuarioDto,
         UsuarioRepo, UsuarioMapper> {
@@ -57,7 +58,7 @@ public class UsuarioService extends AbstractBusinessService<Usuario, Integer, Us
 
     @Transactional
     public UsuarioDto autenticarUsuario(String emailONickname, String password) {
-        Optional<Usuario> usuarioOpt = usuarioRepo.findByEmailOrNickname(emailONickname, emailONickname);
+        Optional<Usuario> usuarioOpt = usuarioRepo.findByEmailOrNicknameAndActiveTrue(emailONickname, emailONickname);
         if (usuarioOpt.isPresent()) {
             Usuario u = usuarioOpt.get();
             if (passwordEncoder.matches(password, u.getPassword())) {

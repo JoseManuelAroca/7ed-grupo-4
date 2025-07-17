@@ -37,6 +37,9 @@ public class Contenido {
     @Column(nullable = false, length = 200)
     private String url;
 
+    @Basic(optional = false)
+    private boolean active = true;
+
     // Relaciones bidireccionales
     @OneToMany(mappedBy = "contenido")
     private List<UsuarioContenido> usuarioContenidos;

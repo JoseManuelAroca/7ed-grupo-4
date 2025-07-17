@@ -13,8 +13,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Usuario usuario = usuarioRepo
-                .findByEmailOrNickname(username, username)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
+                .findByEmailOrNicknameAndActiveTrue(username, username)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado o deshabilitado: " + username));
         return new CustomUserDetails(usuario);
     }
 }

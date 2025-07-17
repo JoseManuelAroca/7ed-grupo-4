@@ -27,6 +27,10 @@
     <link th:href="@{/assets/vendor/glightbox/css/glightbox.min.css}" rel="stylesheet">
     <link th:href="@{/assets/vendor/swiper/swiper-bundle.min.css}" rel="stylesheet">
 
+    <!-- tutoriales -->
+    <script src=" https://cdn.jsdelivr.net/npm/intro.js@7.2.0/intro.min.js "></script>
+    <link href=" https://cdn.jsdelivr.net/npm/intro.js@7.2.0/minified/introjs.min.css " rel="stylesheet">
+
     <!-- Main CSS File -->
     <link th:href="@{/assets/css/main.css}" rel="stylesheet">
 
@@ -124,12 +128,21 @@
             </form>
         </div>
 
+        <!-- tutorial-->
+        <div>
+            <a id="inicio_tutorial" class="ml-5 btn btn-success">Tutorial</a>
+        </div>
+
+
     </div>
 </header>
 
 <main class="main" layout:fragment="contenido">
     <h1>Sección sin modificar busqueda</h1>
 </main>
+<!-- Aqui vamos a escribir la parte del tutorial -->
+<section class="container" layout:fragment="turorial"> </section>
+
 
 <footer id="footer" class="footer position-relative light-background">
 

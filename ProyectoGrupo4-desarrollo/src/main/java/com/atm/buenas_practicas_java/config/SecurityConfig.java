@@ -107,6 +107,7 @@ public class SecurityConfig {
                     .requestMatchers("/", "/iniciar-sesion", "/registrarse", "/assets/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/registrarse").permitAll()
                     .requestMatchers(HttpMethod.POST, "/registrarse").permitAll()
+                    .requestMatchers("/admin/user").hasRole("ADMIN")
                     .anyRequest().authenticated()
             )
             .formLogin(form -> form

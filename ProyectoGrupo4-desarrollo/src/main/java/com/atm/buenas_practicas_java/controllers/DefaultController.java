@@ -1,29 +1,28 @@
 package com.atm.buenas_practicas_java.controllers;
 
 
+import com.atm.buenas_practicas_java.dtos.CambioPswDto;
 import com.atm.buenas_practicas_java.entities.Prueba;
+import com.atm.buenas_practicas_java.entities.Usuario;
 import com.atm.buenas_practicas_java.services.EntidadHijaService;
 import com.atm.buenas_practicas_java.services.EntidadPadreService;
+import com.atm.buenas_practicas_java.services.UsuarioService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import jakarta.servlet.http.HttpServletRequest;
 
 
 import java.io.File;
-import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
 import java.util.List;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.Files;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Controlador encargado de manejar las solicitudes relacionadas con la entidad principal.
@@ -51,6 +50,10 @@ import java.util.Map;
 @Controller
 public class DefaultController {
 
+    private final UsuarioService usuarioService;
+
+
+
     private final EntidadHijaService entidadHijaService;
     private final EntidadPadreService entidadPadreService;
     private final String uploadDir = "/uploads"; // Ruta DENTRO del contenedor
@@ -67,12 +70,15 @@ public class DefaultController {
      * Inicializa el controlador principal asignando los servicios
      * utilizados para gestionar las entidades EntidadPadre y EntidadHija.
      *
+     * @param usuarioService
+     * @param passwordEncoder
      * @param entidadHijaService  instancia de {@link EntidadHijaService} que proporciona
      *                            funcionalidades adicionales relacionadas con la entidad EntidadHija.
      * @param entidadPadreService instancia de {@link EntidadPadreService} que proporciona
      *                            funcionalidades adicionales relacionadas con la entidad EntidadPadre.
      */
-    public DefaultController(EntidadHijaService entidadHijaService, EntidadPadreService entidadPadreService) {
+    public DefaultController(UsuarioService usuarioService, EntidadHijaService entidadHijaService, EntidadPadreService entidadPadreService) {
+        this.usuarioService = usuarioService;
         this.entidadHijaService = entidadHijaService;
         this.entidadPadreService = entidadPadreService;
     }
@@ -315,5 +321,32 @@ public class DefaultController {
 
         model.addAttribute("imagenes", imagenes);
         return "usuariosBloqueados"; // View name
+    }
+    @GetMapping("/usuarios/cambiopassword/{id}")
+    public String cambiopassword(@PathVariable("id") Long id,Model model){
+        CambioPswDto dto = new CambioPswDto();
+        dto.setId(id);
+        model.addAttribute("datos",dto);
+        return "/usuarios/cambiopassword";
+
+    }
+    @PostMapping("/usuarios/cambiopassword/{id}")
+    public String cambiopasswordPOst(@ModelAttribute("datos") CambioPswDto dto, Model model) throws Exception {
+        //Busco usuario por id ( cuidado con método optional)
+        Optional<Usuario> usuario = usuarioService.encuentraPorIdEntity(Math.toIntExact(dto.getId()));
+        if (usuario.isPresent()){
+            //Compruebo password anterior
+            if (usuario.get().getPassword().equals(usuarioService.getPasswordEncoder().encode(dto.getOld_password()))){
+                //Actualizo el usuario
+                Usuario usuarioGuardar = usuario.get();
+                //Cambio la password
+                usuarioGuardar.setPassword(usuarioService.getPasswordEncoder().encode(dto.getNew_password()));
+                Usuario usuarioAct = usuarioService.guardarEntidadEntidad(usuarioGuardar);
+                return "login";
+            }
+        }else{
+            return "paginaError";
+        }
+        return "error";
     }
 }

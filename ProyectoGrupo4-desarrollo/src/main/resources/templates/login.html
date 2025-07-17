@@ -32,11 +32,11 @@
                     <div th:if="${param.logout}" class="alert alert-success">Has cerrado sesión correctamente.</div>
                     <div class="row gy-4">
                         <div>
-                            <input type="text" class="form-control" name="username" placeholder="Email o Nickname" required="">
+                            <input id="username"  type="text" class="form-control" name="username" placeholder="Email o Nickname" required="">
                         </div>
 
                         <div>
-                            <input type="password" class="form-control" name="password" placeholder="Contraseña" required="">
+                            <input  id="password"  type="password" class="form-control" name="password" placeholder="Contraseña" required="">
                         </div>
 
                         <div class="text-center">
@@ -50,7 +50,7 @@
                             <div class="error-message"></div>
                             <div class="sent-message">Your message has been sent. Thank you!</div>
 
-                            <button type="submit">Iniciar sesión</button>
+                            <button id="submit"  type="submit">Iniciar sesión</button>
                         </div>
                     </div>
                 </form>
@@ -58,6 +58,41 @@
         </div>
 
     </section><!-- /Contact Section -->
+</div>
+
+<div layout:fragment="turorial">
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let steps = [{
+                title: "Miapp",
+                intro: "Welcome to login tutorial."
+            },
+                {
+                    element: '#username',
+                    intro: "Este es username"
+                },
+                {
+                    element: '#password',
+                    intro: "Este es password"
+                },
+                {
+                    element: '#submit',
+                    intro: "pulsa para entrar"
+                }
+            ];
+
+            document.getElementById('inicio_tutorial').addEventListener('click', function () {
+                this.style.animation = "none";
+                introJs().setOptions({
+                    steps: steps,
+                    'nextLabel': "Next",
+                    'prevLabel': "Previous",
+                    'doneLabel': "Done",
+                }).start();
+            });
+        });
+
+    </script>
 </div>
 
 </body>
